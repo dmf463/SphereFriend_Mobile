@@ -28,6 +28,7 @@ public class CameraMovement : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
             Vector3 targetPos = Camera.main.ScreenToWorldPoint(touch.position);
+            Vector3 playerPos = Camera.main.ScreenToWorldPoint(Services.PlayerAI.gameObject.transform.position);
 
             if (targetPos.x < leftWall.transform.position.x) MoveCamera();
             else if (targetPos.x > rightWall.transform.position.x) MoveCamera();
@@ -39,7 +40,7 @@ public class CameraMovement : MonoBehaviour
     void MoveCamera()
     {
         playerPos = player.transform.position;
-        float speed = player.GetComponent<PlayerMovement>().speed * Time.deltaTime;
+        float speed = player.GetComponent<PlayerAI>().movementSpeed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, new Vector3(playerPos.x, playerPos.y, -10), speed);
     }
 }

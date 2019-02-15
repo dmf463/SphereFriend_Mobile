@@ -4,17 +4,31 @@ using UnityEngine;
 
 public static class Services {
 
-    private static PlayerMovement _playerMovement;
-    public static PlayerMovement PlayerMovement
+    private static PlayerAI _playerAI;
+    public static PlayerAI PlayerAI
     {
         get
         {
-            Debug.Assert(_playerMovement != null);
-            return _playerMovement;
+            Debug.Assert(_playerAI != null);
+            return _playerAI;
         }
         set
         {
-            _playerMovement = value;
+            _playerAI = value;
+        }
+    }
+
+    private static TouchManager _touch;
+    public static TouchManager Touch
+    {
+        get
+        {
+            Debug.Assert(_touch != null);
+            return _touch;
+        }
+        set
+        {
+            _touch = value;
         }
     }
 

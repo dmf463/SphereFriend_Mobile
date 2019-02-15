@@ -137,7 +137,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8302465}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -286,7 +286,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310515165}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -437,7 +437,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 1.1411606
+  orthographic size: 1.460488
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -496,7 +496,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011901420}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -577,6 +577,51 @@ Transform:
   m_Father: {fileID: 519420032}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+--- !u!1 &1092046703
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1092046705}
+  - component: {fileID: 1092046704}
+  m_Layer: 0
+  m_Name: TouchManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1092046704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092046703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8cc2fdc600db8a449faece3d7a3fe46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  primaryTouch: {x: 0, y: 0, z: 0}
+  touchCount: 0
+--- !u!4 &1092046705
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1092046703}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.60503674, y: 0.116665535, z: -0.015625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1414312347
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,13 +710,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1641406010}
-  - component: {fileID: 1641406012}
+  - component: {fileID: 1641406016}
   - component: {fileID: 1641406009}
   - component: {fileID: 1641406014}
   - component: {fileID: 1641406011}
-  - component: {fileID: 1641406015}
   - component: {fileID: 1641406013}
-  - component: {fileID: 1641406016}
+  - component: {fileID: 1641406015}
   m_Layer: 9
   m_Name: PC
   m_TagString: Untagged
@@ -757,24 +801,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &1641406012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641406008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42345591d65dbec4298fe0a3fc92c274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 1
-  primaryTouch: {x: 0, y: 0, z: 0}
-  secondaryTouch: {x: 0, y: 0, z: 0}
-  dashing: 0
-  walking: 0
-  dashSpeed: 0.25
 --- !u!199 &1641406013
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -5474,6 +5500,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 400c1b8128410e34ebed5c43b085812a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wanderWidth: 1
+  wanderHeight: 1
+  wanderSpeed: 3
+  movementSpeed: 1
+  wandering: 0
+  visibilityRange: 1
+  nearestEnemy: {fileID: 0}
 --- !u!1 &1950428715
 GameObject:
   m_ObjectHideFlags: 0
@@ -5499,7 +5532,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950428715}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0

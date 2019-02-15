@@ -311,30 +311,59 @@ public class LerpPos : TimedGOTask
     }
 }
 
-public class QuickDash : TimedGOTask
+// A task to lerp a gameobject's position
+public class WanderAround : TimedGOTask
 {
     public Vector3 Start { get; private set; }
     public Vector3 End { get; private set; }
 
-    public QuickDash(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
+    public WanderAround(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
     {
         Start = start;
         End = end;
-        Services.PlayerMovement.dashing = true;
     }
 
     protected override void OnTick(float t)
     {
-        Services.PlayerMovement.dashing = true;
         gameObject.transform.position = Vector3.Lerp(Start, End, t);
+        if (gameObject.GetComponent<PlayerAI>().nearestEnemy != null || Services.Touch.touchCount > 0) Abort();
     }
 
     protected override void OnSuccess()
     {
-        Services.PlayerMovement.dashing = false;
-        Services.PlayerMovement.secondaryTouch = Vector3.zero;
+        gameObject.GetComponent<PlayerAI>().wandering = false;
+    }
+
+    protected override void OnAbort()
+    {
+        gameObject.GetComponent<PlayerAI>().wandering = false;
     }
 }
+
+//public class QuickDash : TimedGOTask
+//{
+//    public Vector3 Start { get; private set; }
+//    public Vector3 End { get; private set; }
+
+//    public QuickDash(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
+//    {
+//        Start = start;
+//        End = end;
+//        Services.PlayerAI.dashing = true;
+//    }
+
+//    protected override void OnTick(float t)
+//    {
+//        Services.PlayerAI.dashing = true;
+//        gameObject.transform.position = Vector3.Lerp(Start, End, t);
+//    }
+
+//    protected override void OnSuccess()
+//    {
+//        Services.PlayerAI.dashing = false;
+//        Services.PlayerAI.secondaryTouch = Vector3.zero;
+//    }
+//}
 
 public class LerpRotationBetweenTwoSetQuaternions : TimedGOTask
 {
