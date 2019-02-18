@@ -18,6 +18,13 @@ public class PlayerAI : MonoBehaviour
     private GameObject[] enemies;
     [SerializeField]
     public GameObject nearestEnemy;
+    public ParticleSystem particles;
+    public Gradient psHappy;
+    public Gradient psSad;
+    public Gradient psScared;
+
+    public int fingerLevel;
+
 
     void Start()
     {
@@ -36,10 +43,14 @@ public class PlayerAI : MonoBehaviour
                 ),
             new Wander()
             ));
+
     }
 
     private void Update()
     {
+        ParticleSystem.MainModule psMain = particles.main;
+        psMain.startColor = psSad;
+        Services.Touch.MaxFingers = fingerLevel;
         tm.Update();
         tree.Update(this);
     }
@@ -61,6 +72,8 @@ public class PlayerAI : MonoBehaviour
 
     private void MoveAwayFromEnemy()
     {
+        ParticleSystem.MainModule psMain = particles.main;
+        psMain.startColor = psScared;
         transform.position = Vector3.MoveTowards(transform.position, nearestEnemy.transform.position, -wanderSpeed * Time.deltaTime);
     }
 
@@ -85,10 +98,12 @@ public class PlayerAI : MonoBehaviour
         }
     }
 
-    private void Walk()
+    private void MoveToFinger()
     {
         Vector3 currentPos = transform.position;
         float step = Mathf.Abs(movementSpeed) * Time.deltaTime;
+        ParticleSystem.MainModule psMain = particles.main;
+        psMain.startColor = psHappy;
         transform.position = Vector3.MoveTowards(currentPos, Services.Touch.primaryTouch, step);
     }
 
@@ -141,7 +156,7 @@ public class PlayerAI : MonoBehaviour
     {
         public override bool Update(PlayerAI context)
         {
-            context.Walk();
+            context.MoveToFinger();
             Debug.Log("I love you, finger");
             return true;
         }

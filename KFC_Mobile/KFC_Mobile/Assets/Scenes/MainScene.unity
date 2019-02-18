@@ -212,7 +212,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8302465}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.054, y: -0.05699998, z: 0}
+  m_LocalPosition: {x: 1.761, y: -0.05699998, z: 0}
   m_LocalScale: {x: 1, y: 12.655126, z: 1}
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -361,7 +361,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 310515165}
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: -0.042, y: -0.87, z: 0}
+  m_LocalPosition: {x: -0.042, y: -1.071, z: 0}
   m_LocalScale: {x: 1, y: 15.344354, z: 1}
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -571,7 +571,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011901420}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0.09, y: 0.842, z: 0}
+  m_LocalPosition: {x: 0.09, y: 0.985, z: 0}
   m_LocalScale: {x: 1, y: 15.502534, z: 1}
   m_Children: []
   m_Father: {fileID: 519420032}
@@ -607,6 +607,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   primaryTouch: {x: 0, y: 0, z: 0}
+  currentFinger: {x: 0, y: 0, z: 0}
+  previousFinger: {x: 0, y: 0, z: 0}
   touchCount: 0
 --- !u!4 &1092046705
 Transform:
@@ -780,7 +782,7 @@ Transform:
   m_GameObject: {fileID: 1641406008}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.19769172, y: 0.19769172, z: 0.19769172}
+  m_LocalScale: {x: 0.30061004, y: 0.30061004, z: 0.30061004}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -1717,7 +1719,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 600
+      scalar: 1000
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -2155,7 +2157,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0, g: 0.6853483, b: 1, a: 1}
+        key0: {r: 0, g: 1, b: 0.7034004, a: 1}
         key1: {r: 1, g: 0.5613208, b: 0.88327855, a: 1}
         key2: {r: 0, g: 0, b: 0, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}
@@ -5503,10 +5505,99 @@ MonoBehaviour:
   wanderWidth: 1
   wanderHeight: 1
   wanderSpeed: 3
-  movementSpeed: 1
+  movementSpeed: 5
   wandering: 0
   visibilityRange: 1
   nearestEnemy: {fileID: 0}
+  particles: {fileID: 1641406015}
+  psHappy:
+    serializedVersion: 2
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 0.5613208, b: 0.88327855, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 50886
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 51272
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  psSad:
+    serializedVersion: 2
+    key0: {r: 0, g: 0, b: 0, a: 1}
+    key1: {r: 0.09695305, g: 0, b: 0.6792453, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 42598
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 42598
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  psScared:
+    serializedVersion: 2
+    key0: {r: 1, g: 0, b: 0, a: 1}
+    key1: {r: 1, g: 0.50095195, b: 0, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
+    key4: {r: 0, g: 0, b: 0, a: 0}
+    key5: {r: 0, g: 0, b: 0, a: 0}
+    key6: {r: 0, g: 0, b: 0, a: 0}
+    key7: {r: 0, g: 0, b: 0, a: 0}
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
+    ctime4: 0
+    ctime5: 0
+    ctime6: 0
+    ctime7: 0
+    atime0: 0
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 2
+    m_NumAlphaKeys: 2
+  fingerLevel: 5
 --- !u!1 &1950428715
 GameObject:
   m_ObjectHideFlags: 0
@@ -5607,7 +5698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950428715}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.1669999, y: -0.05699998, z: 0}
+  m_LocalPosition: {x: -1.998, y: -0.05699998, z: 0}
   m_LocalScale: {x: 1, y: 12.655129, z: 1}
   m_Children: []
   m_Father: {fileID: 519420032}
