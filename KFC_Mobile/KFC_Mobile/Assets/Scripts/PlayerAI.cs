@@ -6,11 +6,12 @@ using Tree = BehaviorTree.Tree<PlayerAI>;
 
 public class PlayerAI : MonoBehaviour
 {
-    private Tree<PlayerAI> tree;
+    //private Tree<PlayerAI> tree;
     public float wanderWidth;
     public float wanderHeight;
     public float wanderSpeed;
     public float movementSpeed;
+    public float dashSpeed;
     public bool wandering = false;
     private bool fleeing = false;
     public float visibilityRange;
@@ -22,27 +23,33 @@ public class PlayerAI : MonoBehaviour
     public Gradient psHappy;
     public Gradient psSad;
     public Gradient psScared;
-
+    public GameObject armor;
     public int fingerLevel;
 
 
     void Start()
     {
         tm = new TaskManager();
-        tree = new Tree(new Selector(
-            //Do we see a finger?
-            new Sequence(
-                new FingersAvailable(),
-                new JumpToNearestFinger()
-                ),
-            //Is an enemy nearby?
-            new Sequence(
-                new NoFingersAvailable(),
-                new IsEnemyNear(),
-                new Flee()
-                ),
-            new Wander()
-            ));
+        //tree = new Tree(new Selector(
+        //    //Do we see a finger?
+        //    new Sequence(
+        //        new Not<PlayerAI>(new IsOnFinger()),
+        //        new FingersAvailable(),
+        //        new JumpToNearestFinger()
+        //        ),
+        //    //Am I currently on a finger?
+        //    new Sequence(
+        //        new IsOnFinger(),
+        //        new FollowFinger()
+        //        ),
+        //    //Is an enemy nearby?
+        //    new Sequence(
+        //        new NoFingersAvailable(),
+        //        new IsEnemyNear(),
+        //        new Flee()
+        //        ),
+        //    new Wander()
+        //    ));
 
     }
 
@@ -52,7 +59,7 @@ public class PlayerAI : MonoBehaviour
         psMain.startColor = psSad;
         Services.Touch.MaxFingers = fingerLevel;
         tm.Update();
-        tree.Update(this);
+        //tree.Update(this);
     }
 
     private void WanderAround()
@@ -98,80 +105,112 @@ public class PlayerAI : MonoBehaviour
         }
     }
 
+    private void StayOnFinger()
+    {
+        Vector3 currentPos = transform.position;
+        float step = Mathf.Abs(movementSpeed) * Time.deltaTime;
+        ParticleSystem.MainModule psMain = particles.main;
+        psMain.startColor = psHappy;
+        armor.SetActive(false);
+        transform.position = Vector3.MoveTowards(currentPos, Services.Touch.primaryTouchPos, step);
+    }
+
     private void MoveToFinger()
     {
         Vector3 currentPos = transform.position;
         float step = Mathf.Abs(movementSpeed) * Time.deltaTime;
         ParticleSystem.MainModule psMain = particles.main;
         psMain.startColor = psHappy;
-        transform.position = Vector3.MoveTowards(currentPos, Services.Touch.primaryTouch, step);
+        armor.SetActive(true);
+        transform.position = Vector3.MoveTowards(currentPos, Services.Touch.primaryTouchPos, step);
+        Jump moveToFinger = new Jump(gameObject, currentPos, Services.Touch.primaryTouchPos, dashSpeed);
+        tm.Do(moveToFinger);
     }
 
-    ///////////////////////////////
-    ///////////NODES///////////////
-    ///////////////////////////////
+    #region behaviour Tree way
+    /////////////////////////////////
+    /////////////NODES///////////////
+    /////////////////////////////////
 
-    /////////CONDITIONS///////////
-    private class FingersAvailable : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            return Services.Touch.touchCount > 0;
-        }
-    }
+    ///////////CONDITIONS///////////
 
-    private class NoFingersAvailable : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            return Services.Touch.touchCount == 0;
-        }
-    }
+    //private class IsOnFinger : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        return Services.Touch.currentFingerTouching;
+    //    }
+    //}
 
-    private class IsEnemyNear : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            context.FindNearbyEnemy();
-            if (context.nearestEnemy == null) return false;
-            else
-            {
-                return Vector3.Distance(context.transform.position, context.nearestEnemy.transform.position) < context.visibilityRange;
-            }
-        }
-    }
+    //private class FingersAvailable : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        return (Services.Touch.touchCount > 0 && !context.isOnFinger);
+    //    }
+    //}
 
-    //////////ACTIONS//////////
-    private class Wander : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            context.WanderAround();
-            Debug.Log("wandering");
-            return true;
-        }
-    }
+    //private class NoFingersAvailable : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        return Services.Touch.touchCount == 0;
+    //    }
+    //}
 
-    private class JumpToNearestFinger : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            context.MoveToFinger();
-            Debug.Log("I love you, finger");
-            return true;
-        }
-    }
+    //private class IsEnemyNear : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        context.FindNearbyEnemy();
+    //        if (context.nearestEnemy == null) return false;
+    //        else
+    //        {
+    //            return Vector3.Distance(context.transform.position, context.nearestEnemy.transform.position) < context.visibilityRange;
+    //        }
+    //    }
+    //}
 
-    private class Flee : Node<PlayerAI>
-    {
-        public override bool Update(PlayerAI context)
-        {
-            context.MoveAwayFromEnemy();
-            context.fleeing = true;
-            Debug.Log("fleeing");
-            return true;
-        }
-    }
+    ////////////ACTIONS//////////
+    //private class Wander : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        context.WanderAround();
+    //        Debug.Log("wandering");
+    //        return true;
+    //    }
+    //}
 
+    //private class FollowFinger : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        context.StayOnFinger();
+    //        return true;
+    //    }
+    //}
+
+    //private class JumpToNearestFinger : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        context.MoveToFinger();
+    //        Debug.Log("I love you, finger");
+    //        return true;
+    //    }
+    //}
+
+    //private class Flee : Node<PlayerAI>
+    //{
+    //    public override bool Update(PlayerAI context)
+    //    {
+    //        context.MoveAwayFromEnemy();
+    //        context.fleeing = true;
+    //        Debug.Log("fleeing");
+    //        return true;
+    //    }
+    //}
+    #endregion
 }
 

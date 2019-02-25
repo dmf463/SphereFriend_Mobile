@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MyGameManager : MonoBehaviour
 {
+    public Text text;
     private void Awake()
     {
         Services.GM = this;
@@ -20,6 +22,6 @@ public class MyGameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

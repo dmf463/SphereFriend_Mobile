@@ -18,4 +18,9 @@ public class Enemy : MonoBehaviour
         float step = speed * Time.deltaTime;
         transform.position = Vector3.MoveTowards(transform.position, player.transform.position, step);
     }
+
+    private void HitByArmor()
+    {
+        Destroy(gameObject);
+    }
 }

@@ -326,44 +326,36 @@ public class WanderAround : TimedGOTask
     protected override void OnTick(float t)
     {
         gameObject.transform.position = Vector3.Lerp(Start, End, t);
-        if (gameObject.GetComponent<PlayerAI>().nearestEnemy != null || Services.Touch.touchCount > 0) Abort();
+        if (gameObject.GetComponent<MyCritter>().nearestEnemy != null || Services.Touch.touchCount > 0) Abort();
     }
 
     protected override void OnSuccess()
     {
-        gameObject.GetComponent<PlayerAI>().wandering = false;
+        gameObject.GetComponent<MyCritter>().wandering = false;
     }
 
     protected override void OnAbort()
     {
-        gameObject.GetComponent<PlayerAI>().wandering = false;
+        gameObject.GetComponent<MyCritter>().wandering = false;
     }
 }
 
-//public class QuickDash : TimedGOTask
-//{
-//    public Vector3 Start { get; private set; }
-//    public Vector3 End { get; private set; }
+public class Jump : TimedGOTask
+{
+    public Vector3 Start { get; private set; }
+    public Vector3 End { get; private set; }
 
-//    public QuickDash(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
-//    {
-//        Start = start;
-//        End = end;
-//        Services.PlayerAI.dashing = true;
-//    }
+    public Jump(GameObject gameObject, Vector3 start, Vector3 end, float duration) : base(gameObject, duration)
+    {
+        Start = start;
+        End = end;
+    }
 
-//    protected override void OnTick(float t)
-//    {
-//        Services.PlayerAI.dashing = true;
-//        gameObject.transform.position = Vector3.Lerp(Start, End, t);
-//    }
-
-//    protected override void OnSuccess()
-//    {
-//        Services.PlayerAI.dashing = false;
-//        Services.PlayerAI.secondaryTouch = Vector3.zero;
-//    }
-//}
+    protected override void OnTick(float t)
+    {
+        gameObject.transform.position = Vector3.Lerp(Start, End, t);
+    }
+}
 
 public class LerpRotationBetweenTwoSetQuaternions : TimedGOTask
 {

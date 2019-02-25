@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class TouchManager : MonoBehaviour
 {
-    public Vector3 primaryTouch;
-    public Vector3 currentFinger;
-    public Vector3 previousFinger;
+    public Vector3 primaryTouchPos;
+    public Touch currentFinger;
+    public bool currentFingerTouching;
+    public Vector3 previousFinger; 
     private int _maxFingers;
     public int MaxFingers
     {
@@ -39,9 +40,10 @@ public class TouchManager : MonoBehaviour
     {
         if (Input.touchCount > 0)
         {
+            int touchInt = touchCount - 1;
             if (touchCount > _maxFingers) touchCount = _maxFingers;
-            primaryTouch = GetTouchPos(touchCount - 1);
-            currentFinger = GetTouchPos(touchCount - 1);
+            primaryTouchPos = GetTouchPos(touchInt);
+            currentFinger = GetTouch(touchInt);
         }
     }
     
@@ -52,5 +54,10 @@ public class TouchManager : MonoBehaviour
         pos = Camera.main.ScreenToWorldPoint(touch.position);
         pos.z = 0;
         return pos;
+    }
+
+    private Touch GetTouch(int touchIndex)
+    {
+        return Input.GetTouch(touchIndex);
     }
 }
