@@ -40,7 +40,7 @@ public class DontGoThroughThings : MonoBehaviour
 	      RaycastHit hitInfo; 
  
 	      //check for obstructions we might have missed 
-	      if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, movementMagnitude, layerMask.value))
+	      if (Physics.Raycast(previousPosition, movementThisStep, out hitInfo, (int)movementMagnitude, layerMask.value))
               {
                  if (!hitInfo.collider)
                      return;

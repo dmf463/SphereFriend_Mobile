@@ -6,9 +6,11 @@ using UnityEngine.UI;
 public class MyGameManager : MonoBehaviour
 {
     public Text text;
+    public Text levelCompletionText;
     private void Awake()
     {
         Services.GM = this;
+        Services.LevelManager = GameObject.Find("LevelManager").GetComponent<MyLevelManager>();
         Services.PlayerAI = GameObject.Find("PC").GetComponent<PlayerAI>();
         Services.PrefabDB = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.Touch = GameObject.Find("TouchManager").GetComponent<TouchManager>();
@@ -23,5 +25,10 @@ public class MyGameManager : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public void LevelComplete(string outcome)
+    {
+        levelCompletionText.text = outcome;
     }
 }

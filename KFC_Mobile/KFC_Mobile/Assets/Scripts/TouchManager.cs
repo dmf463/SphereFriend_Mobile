@@ -23,6 +23,7 @@ public class TouchManager : MonoBehaviour
         }
     }
     public int touchCount;
+    public int par;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +35,7 @@ public class TouchManager : MonoBehaviour
     {
         touchCount = Input.touchCount;
         AssignPrimaryTouch();
+        Services.GM.text.text = par.ToString();
     }
 
     private void AssignPrimaryTouch()
@@ -44,6 +46,7 @@ public class TouchManager : MonoBehaviour
             if (touchCount > _maxFingers) touchCount = _maxFingers;
             primaryTouchPos = GetTouchPos(touchInt);
             currentFinger = GetTouch(touchInt);
+            if (currentFinger.phase == TouchPhase.Began) par++;
         }
     }
     

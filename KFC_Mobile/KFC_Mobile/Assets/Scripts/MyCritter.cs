@@ -28,6 +28,7 @@ public class MyCritter : MonoBehaviour
     public GameObject armor;
     public GameObject nearestEnemy;
     private GameObject[] enemies;
+    public bool hitWall;
     // Start is called before the first frame update
     void Start()
     {
@@ -44,15 +45,19 @@ public class MyCritter : MonoBehaviour
     {
         _tm.Update();
         _fsm.Update();
-        Services.GM.text.text = _fsm.CurrentState.ToString();
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         var other = collision.gameObject;
-        if (armor.activeSelf)
+        if (other.gameObject.tag == "Wall") wanderSpeed *= -1;
+        var hitObj = other.GetComponent<Hittable>();
+        if (hitObj != null)
         {
-            other.SendMessage("HitByArmor");
+            if (armor.activeSelf)
+            {
+                other.SendMessage("HitByArmor");
+            }
         }
     }
 
@@ -65,17 +70,20 @@ public class MyCritter : MonoBehaviour
 
     private void WanderAround()
     {
-        if (!wandering)
-        {
-            wandering = true;
+        //if (!wandering)
+        //{
+        //    wandering = true;
             float xPos = transform.position.x;
             float yPos = transform.position.y;
             Vector3 newPos = new Vector3(Random.Range(xPos - wanderWidth, xPos + wanderWidth), Random.Range(yPos - wanderHeight, yPos + wanderHeight), transform.position.z);
-            float step = Mathf.Abs(wanderSpeed) * Time.deltaTime;
+            //float step = Mathf.Abs(wanderSpeed) * Time.deltaTime;
             //transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-            WanderAround startWander = new WanderAround(gameObject, transform.position, newPos, wanderSpeed);
-            _tm.Do(startWander);
-        }
+            //WanderAround startWander = new WanderAround(gameObject, transform.position, newPos, wanderSpeed);
+            //_tm.Do(startWander);
+            var directionToDestination = (newPos - transform.position).normalized;
+            var impulseToDestination = directionToDestination * wanderSpeed;
+            GetComponent<Rigidbody2D>().AddForce(impulseToDestination, ForceMode2D.Impulse);
+        //}
     }
 
     private void StayOnFinger()

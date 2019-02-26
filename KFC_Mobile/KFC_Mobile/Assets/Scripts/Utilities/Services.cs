@@ -4,6 +4,19 @@ using UnityEngine;
 
 public static class Services {
 
+    private static MyLevelManager _levelManager;
+    public static MyLevelManager LevelManager
+    {
+        get
+        {
+            Debug.Assert(_levelManager != null);
+            return _levelManager;
+        }
+        set
+        {
+            _levelManager = value;
+        }
+    }
     private static PlayerAI _playerAI;
     public static PlayerAI PlayerAI
     {
@@ -84,19 +97,6 @@ public static class Services {
 		}
 		set{
 			_event_manager = value;
-		}
-	}
-
-	private static LevelManager _level_manager;
-	public static LevelManager Level_Manager
-	{
-		get
-		{
-			Debug.Assert (_level_manager != null);
-			return _level_manager;
-		}
-		set{
-			_level_manager = value;
 		}
 	}
 
