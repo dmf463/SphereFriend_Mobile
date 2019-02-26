@@ -16,12 +16,15 @@ public class ExitButton : Hittable
         
     }
 
-    protected override void HitByArmor()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (Services.Touch.par == Services.LevelManager.targetPar)
+        if(collision.gameObject.name == "PC")
         {
-            Services.GM.levelCompletionText.text = "SUCCESS";
+            if (Services.Touch.par == Services.LevelManager.targetPar)
+            {
+                Services.GM.levelCompletionText.text = "SUCCESS";
+            }
+            else Services.GM.levelCompletionText.text = "FAILURE";
         }
-        else Services.GM.levelCompletionText.text = "FAILURE";
     }
 }
