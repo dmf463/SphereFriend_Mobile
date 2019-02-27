@@ -17,17 +17,18 @@ public static class Services {
             _levelManager = value;
         }
     }
-    private static PlayerAI _playerAI;
-    public static PlayerAI PlayerAI
+
+    private static MyCritter _myCritter;
+    public static MyCritter MyCritter
     {
         get
         {
-            Debug.Assert(_playerAI != null);
-            return _playerAI;
+            Debug.Assert(_myCritter != null);
+            return _myCritter;
         }
         set
         {
-            _playerAI = value;
+            _myCritter = value;
         }
     }
 

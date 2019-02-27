@@ -20,7 +20,7 @@ public class ExitButton : Hittable
     {
         if(collision.gameObject.name == "PC")
         {
-            if (Services.Touch.par == Services.LevelManager.targetPar)
+            if (Services.Touch.par <= Services.LevelManager.targetPar)
             {
                 Services.GM.levelCompletionText.text = "SUCCESS";
             }

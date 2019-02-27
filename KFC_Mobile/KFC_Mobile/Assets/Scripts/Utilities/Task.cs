@@ -331,12 +331,12 @@ public class WanderAround : TimedGOTask
 
     protected override void OnSuccess()
     {
-        gameObject.GetComponent<MyCritter>().wandering = false;
+        //gameObject.GetComponent<MyCritter>().wandering = false;
     }
 
     protected override void OnAbort()
     {
-        gameObject.GetComponent<MyCritter>().wandering = false;
+        //gameObject.GetComponent<MyCritter>().wandering = false;
     }
 }
 

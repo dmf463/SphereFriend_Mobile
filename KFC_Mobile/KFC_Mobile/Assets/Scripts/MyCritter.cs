@@ -8,7 +8,6 @@ public class MyCritter : MonoBehaviour
     private FSM<MyCritter> _fsm;
     private TaskManager _tm;
     #region wander variables
-    public bool wandering;
     public float wanderWidth;
     public float wanderHeight;
     public float wanderSpeed;
@@ -19,16 +18,19 @@ public class MyCritter : MonoBehaviour
     public Gradient psHappy;
     public Gradient psSad;
     public Gradient psScared;
+    public Gradient psTired;
     #endregion
     public float movementSpeed;
     public float jumpSpeed;
-    public int fingerLevel;
-    public float distanceThreshold;
+    public int jumpLevel;
+    public int jumpCount;
+    public float distanceToFollowThreshold;
     public float visibilityRange;
     public GameObject armor;
     public GameObject nearestEnemy;
     private GameObject[] enemies;
-    public bool hitWall;
+    public float followTime;
+    public bool tired;
     // Start is called before the first frame update
     void Start()
     {
@@ -54,10 +56,8 @@ public class MyCritter : MonoBehaviour
         var hitObj = other.GetComponent<Hittable>();
         if (hitObj != null)
         {
-            if (armor.activeSelf)
-            {
-                other.SendMessage("HitByArmor");
-            }
+            if (hitObj.deadly) ((CritterState)_fsm.CurrentState).OnDeath();
+            else if (armor.activeSelf) hitObj.SendMessage("HitByArmor");
         }
     }
 
@@ -65,25 +65,19 @@ public class MyCritter : MonoBehaviour
     {
         psMain = particles.main;
         psMain.startColor = psSad;
-        Services.Touch.MaxFingers = fingerLevel;
+        Services.Touch.MaxFingers = jumpLevel;
     }
 
     private void WanderAround()
     {
-        //if (!wandering)
-        //{
-        //    wandering = true;
-            float xPos = transform.position.x;
-            float yPos = transform.position.y;
-            Vector3 newPos = new Vector3(Random.Range(xPos - wanderWidth, xPos + wanderWidth), Random.Range(yPos - wanderHeight, yPos + wanderHeight), transform.position.z);
-            //float step = Mathf.Abs(wanderSpeed) * Time.deltaTime;
-            //transform.position = Vector3.MoveTowards(transform.position, newPos, step);
-            //WanderAround startWander = new WanderAround(gameObject, transform.position, newPos, wanderSpeed);
-            //_tm.Do(startWander);
-            var directionToDestination = (newPos - transform.position).normalized;
-            var impulseToDestination = directionToDestination * wanderSpeed;
-            GetComponent<Rigidbody2D>().AddForce(impulseToDestination, ForceMode2D.Impulse);
-        //}
+        if (tired) psMain.startColor = psTired;
+        else psMain.startColor = psSad;
+        float xPos = transform.position.x;
+        float yPos = transform.position.y;
+        Vector3 newPos = new Vector3(Random.Range(xPos - wanderWidth, xPos + wanderWidth), Random.Range(yPos - wanderHeight, yPos + wanderHeight), transform.position.z);
+        var directionToDestination = (newPos - transform.position).normalized;
+        var impulseToDestination = directionToDestination * wanderSpeed;
+        GetComponent<Rigidbody2D>().AddForce(impulseToDestination, ForceMode2D.Impulse);
     }
 
     private void StayOnFinger()
@@ -131,26 +125,39 @@ public class MyCritter : MonoBehaviour
 
     private bool OnFinger()
     {
-        return Vector3.Distance(transform.position, Services.Touch.primaryTouchPos) <= distanceThreshold;
+        return Vector3.Distance(transform.position, Services.Touch.primaryTouchPos) <= distanceToFollowThreshold;
     }
 
     ///////////////////////////////////////////////////////////////////////
     // STATES
     ///////////////////////////////////////////////////////////////////////
-
-    private class Wandering : FSM<MyCritter>.State
+    private class CritterState : FSM<MyCritter>.State
     {
+        public void OnDeath()
+        {
+            Parent.TransitionTo<Dead>();
+        }
+    }
+
+    private class Wandering : CritterState
+    {
+        float tiredEnterTime;
         public override void OnEnter()
         {
-            Context.psMain.startColor = Context.psSad;
-            Services.Touch.MaxFingers = Context.fingerLevel;
+            Services.Touch.MaxFingers = Context.jumpLevel;
+            if (Context.tired)
+            {
+                tiredEnterTime = Time.time;
+            }
         }
 
         public override void Update()
         {
             Context.FindNearbyEnemy();
-            if (Services.Touch.touchCount > 0)
+            if (Context.tired && ((Time.time - tiredEnterTime) > Context.followTime)) Context.tired = false;
+            if (Services.Touch.touchCount > 0 && !Context.tired)
             {
+                Debug.Log("Transitioning to Jump");
                 TransitionTo<Jumping>();
                 return;
             }
@@ -162,21 +169,27 @@ public class MyCritter : MonoBehaviour
         }
     }
 
-    private class Jumping : FSM<MyCritter>.State
+    private class Jumping : CritterState
     {
         public override void OnEnter()
         {
             Context.armor.SetActive(true);
+            Context.jumpCount++;
+            if (Context.jumpCount > Context.jumpLevel)
+            {
+                Context.jumpCount = 0;
+                Context.tired = true;
+            }
         }
         public override void Update()
         {
             Debug.Log("Jumping");
-            if (Context.OnFinger())
+            if (Context.OnFinger() && !Context.tired)
             {
                 TransitionTo<Following>();
                 return;
             }
-            else if (Services.Touch.touchCount == 0)
+            else if (Services.Touch.touchCount == 0 || Context.tired)
             {
                 TransitionTo<Wandering>();
                 return;
@@ -189,13 +202,24 @@ public class MyCritter : MonoBehaviour
         }
     }
 
-    private class Following : FSM<MyCritter>.State
+    private class Following : CritterState
     {
+        private float enterTime;
+
+        public override void OnEnter()
+        {
+            enterTime = Time.time;
+        }
         public override void Update()
         {
             Debug.Log("Following");
-            if (Services.Touch.touchCount == 0) TransitionTo<Wandering>();
-            else if((Services.Touch.currentFinger.phase == TouchPhase.Began || Services.Touch.currentFinger.phase == TouchPhase.Ended) && Services.Touch.touchCount != 0)
+            if ((Time.time - enterTime) > Context.followTime)
+            {
+                Context.tired = true;
+                TransitionTo<Wandering>();
+            }
+            else if (Services.Touch.touchCount == 0) TransitionTo<Wandering>();
+            else if ((Services.Touch.currentFinger.phase == TouchPhase.Began || Services.Touch.currentFinger.phase == TouchPhase.Ended) && Services.Touch.touchCount != 0)
             {
                 TransitionTo<Jumping>();
                 return;
@@ -204,7 +228,7 @@ public class MyCritter : MonoBehaviour
         }
     }
 
-    private class Fleeing : FSM<MyCritter>.State
+    private class Fleeing : CritterState
     {
         public override void Update()
         {
@@ -212,6 +236,14 @@ public class MyCritter : MonoBehaviour
             if (Context.nearestEnemy == null) TransitionTo<Wandering>();
             else if (Services.Touch.touchCount > 0) TransitionTo<Jumping>();
             else Context.MoveAwayFromEnemy();
+        }
+    }
+
+    private class Dead : CritterState
+    {
+        public override void Update()
+        {
+            Destroy(Context.gameObject);
         }
     }
 }

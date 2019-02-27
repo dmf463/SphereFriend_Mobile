@@ -4,43 +4,18 @@ using UnityEngine;
 [CreateAssetMenu (menuName = "Config")]
 public class Config : ScriptableObject
 {
-    [SerializeField] private float _foodGenerateInterval;
-    public float FoodGenerateInterval { get { return _foodGenerateInterval; } }
+    [SerializeField] private float _movementSpeed;
+    public float MovementSpeed { get { return _movementSpeed; } }
 
-    [SerializeField] private uint _maxFood;
-    public float MaxFood { get { return _maxFood; } }
+    [SerializeField] private float _jumpSpeed;
+    public float JumpSpeed { get { return _movementSpeed; } }
 
-    [SerializeField] private GameObject _foodPrefab;
-    public GameObject FoodPrefab { get { return _foodPrefab; } }
+    [SerializeField] private float _wanderSpeed;
+    public float WanderSpeed { get { return _wanderSpeed;} }
 
-    [SerializeField] private float _searchDistance;
-    public float SearchDistance { get { return _searchDistance; } }
+    [SerializeField] private float _fingerLevel;
+    public float FingerLevel { get { return _fingerLevel; } }
 
-    [SerializeField] private float _searchSpeed;
-    public float SearchSpeed { get { return _searchSpeed; } }
 
-    [SerializeField] private float _trackingSpeed;
-    public float TrackingSpeed { get { return _trackingSpeed; } }
-
-    [SerializeField] private float _destinationThreshold;
-    public float DestinationThreshold { get { return _destinationThreshold; } }
-
-    [SerializeField] private float _eatingDuration;
-    public float EatingDuration { get { return _eatingDuration; } }
-
-    [SerializeField] private Color _eatingColor;
-    public Color EatingColor { get { return _eatingColor; } }
-
-    [SerializeField] private float _sleepingDuration;
-    public float SleepingDuration { get { return _sleepingDuration; } }
-
-    [SerializeField] private Color _sleepingColor;
-    public Color SleepingColor { get { return _sleepingColor; } }
-    
-    [SerializeField] private Color _searchingColor;
-    public Color SearchingColor { get { return _searchingColor; } }
-    
-    [SerializeField] private Color _trackingColor;
-    public Color TrackingColor { get { return _trackingColor; } }
 
 }

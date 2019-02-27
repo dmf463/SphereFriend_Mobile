@@ -15,12 +15,4 @@ public class PrefabDB : ScriptableObject
     [SerializeField]
     private GameObject enemy;
     public GameObject Enemy { get { return enemy; } }
-
-    [SerializeField]
-    private GameObject touchIcon;
-    public GameObject TouchIcon { get { return touchIcon; } }
-
-    [SerializeField]
-    private GameObject dashIcon;
-    public GameObject DashIcon { get { return dashIcon; } }
 }

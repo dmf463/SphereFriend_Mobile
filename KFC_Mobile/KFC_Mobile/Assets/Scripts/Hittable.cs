@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Hittable : MonoBehaviour
 {
+    public bool deadly;
     // Start is called before the first frame update
     void Start()
     {

@@ -6,7 +6,6 @@ public class TouchManager : MonoBehaviour
 {
     public Vector3 primaryTouchPos;
     public Touch currentFinger;
-    public bool currentFingerTouching;
     public Vector3 previousFinger; 
     private int _maxFingers;
     public int MaxFingers

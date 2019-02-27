@@ -10,10 +10,10 @@ public class MyGameManager : MonoBehaviour
     private void Awake()
     {
         Services.GM = this;
-        Services.LevelManager = GameObject.Find("LevelManager").GetComponent<MyLevelManager>();
-        Services.PlayerAI = GameObject.Find("PC").GetComponent<PlayerAI>();
-        Services.PrefabDB = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
         Services.Touch = GameObject.Find("TouchManager").GetComponent<TouchManager>();
+        Services.LevelManager = GameObject.Find("LevelManager").GetComponent<MyLevelManager>();
+        Services.MyCritter = GameObject.Find("PC").GetComponent<MyCritter>();
+        Services.PrefabDB = Resources.Load<PrefabDB>("Prefabs/PrefabDB");
     }
     // Start is called before the first frame update
     void Start()
