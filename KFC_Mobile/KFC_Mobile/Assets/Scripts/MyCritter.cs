@@ -52,7 +52,11 @@ public class MyCritter : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         var other = collision.gameObject;
-        if (other.gameObject.tag == "Wall") wanderSpeed *= -1;
+        if (other.gameObject.tag == "Wall")
+        {
+            wanderSpeed *= -1;
+            ((CritterState)_fsm.CurrentState).OnHitWall();
+        }
         var hitObj = other.GetComponent<Hittable>();
         if (hitObj != null)
         {
@@ -136,6 +140,10 @@ public class MyCritter : MonoBehaviour
         public void OnDeath()
         {
             Parent.TransitionTo<Dead>();
+        }
+        public void OnHitWall()
+        {
+            Parent.TransitionTo<Wandering>();
         }
     }
 
